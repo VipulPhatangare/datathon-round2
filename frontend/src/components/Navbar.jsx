@@ -47,6 +47,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to={user.role === 'admin' ? '/admin/dashboard' : '/dashboard'} className="navbar-brand">
+          <img src="/gfg_logo.png" alt="GFG Logo" style={{ height: '35px', marginRight: '10px' }} />
           DATATHON
         </Link>
         
@@ -62,6 +63,7 @@ function Navbar() {
       <div className={`navbar-menu ${mobileMenuOpen ? 'open' : ''}`}>
         {/* Mobile sidebar header */}
         <div className="sidebar-header">
+          <img src="/gfg_logo.png" alt="GFG Logo" style={{ height: '30px', marginRight: '10px' }} />
           <span className="sidebar-title">DATATHON</span>
           <button className="sidebar-close" onClick={closeMobileMenu}>✕</button>
         </div>
