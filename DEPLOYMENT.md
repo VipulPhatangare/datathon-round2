@@ -111,7 +111,7 @@ PORT=4000
 NODE_ENV=production
 
 # Frontend URL (your domain)
-FRONTEND_URL=https://yourdomain.com
+FRONTEND_URL=https://datathon.gfgpccoe.in
 ```
 
 Save: `Ctrl+X`, then `Y`, then `Enter`
@@ -150,7 +150,7 @@ nano src/api.js
 Change the baseURL to your domain:
 ```javascript
 const api = axios.create({
-  baseURL: 'https://yourdomain.com/api',
+  baseURL: 'https://datathon.gfgpccoe.in/api',
   // ... rest of config
 });
 ```
@@ -212,11 +212,11 @@ pm2 delete all      # Remove from PM2
 sudo nano /etc/nginx/sites-available/datathon
 ```
 
-Paste this configuration (replace `yourdomain.com`):
+Paste this configuration:
 ```nginx
 server {
     listen 80;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name datathon.gfgpccoe.in www.datathon.gfgpccoe.in;
 
     # Frontend (React build)
     root /var/www/datathon/frontend/dist;
@@ -271,7 +271,7 @@ sudo apt install -y certbot python3-certbot-nginx
 
 ### Get SSL certificate
 ```bash
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+sudo certbot --nginx -d datathon.gfgpccoe.in -d www.datathon.gfgpccoe.in
 ```
 
 Follow prompts:
