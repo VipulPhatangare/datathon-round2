@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { submissionAPI, API_BASE_URL } from '../api';
+import { useToast } from '../components/ToastProvider';
+import ConfirmModal from '../components/ConfirmModal';
 import axios from 'axios';
 
 function Submissions() {
+  const toast = useToast();
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -13,6 +16,12 @@ function Submissions() {
   const [competitionStatus, setCompetitionStatus] = useState(null);
   const [statusLoading, setStatusLoading] = useState(true);
   const [countdown, setCountdown] = useState(null);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    action: null
+  });
   
   const navigate = useNavigate();
 
@@ -98,19 +107,22 @@ function Submissions() {
   };
 
   const handleDeleteSubmission = async (submissionId, filename) => {
-    if (!window.confirm(`Are you sure you want to delete "${filename}"?\n\nNote: This submission will still count towards your submission limit.`)) {
-      return;
-    }
-
-    try {
-      const response = await submissionAPI.deleteSubmission(submissionId);
-      setSuccessMessage(response.data.message);
-      setTimeout(() => setSuccessMessage(''), 5000);
-      fetchSubmissions();
-    } catch (err) {
-      setError(err.response?.data?.error || 'Failed to delete submission');
-      setTimeout(() => setError(''), 3000);
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Submission',
+      message: `Are you sure you want to delete "${filename}"?\n\nNote: This submission will still count towards your submission limit.`,
+      action: async () => {
+        try {
+          const response = await submissionAPI.deleteSubmission(submissionId);
+          toast.success(response.data.message);
+          fetchSubmissions();
+        } catch (err) {
+          toast.error(err.response?.data?.error || 'Failed to delete submission');
+        } finally {
+          setConfirmModal({ isOpen: false, title: '', message: '', action: null });
+        }
+      }
+    });
   };
 
   const downloadCSV = async () => {
@@ -345,6 +357,15 @@ function Submissions() {
           </>
         )}
       </div>
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', action: null })}
+        onConfirm={confirmModal.action}
+        title={confirmModal.title}
+        message={confirmModal.message}
+      />
     </div>
   );
 }

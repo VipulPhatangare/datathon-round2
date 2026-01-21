@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../api';
+import { useToast } from '../components/ToastProvider';
+import ConfirmModal from '../components/ConfirmModal';
 import Navbar from '../components/Navbar';
 import '../styles/Discussion.css';
 
 const Discussion = () => {
+  const toast = useToast();
   const [discussions, setDiscussions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -13,6 +16,12 @@ const Discussion = () => {
   const [replyMessage, setReplyMessage] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    action: null
+  });
 
   useEffect(() => {
     fetchDiscussions();
@@ -85,18 +94,26 @@ const Discussion = () => {
   };
 
   const handleDeleteMessage = async (messageId) => {
-    if (!window.confirm('Are you sure you want to delete this message?')) return;
-
-    try {
-      const token = localStorage.getItem('token');
-      await axios.delete(`${API_BASE_URL}/discussion/${messageId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      fetchDiscussions();
-    } catch (err) {
-      console.error('Error deleting message:', err);
-      setError(err.response?.data?.error || 'Failed to delete message');
-    }
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Message',
+      message: 'Are you sure you want to delete this message? This action cannot be undone.',
+      action: async () => {
+        try {
+          const token = localStorage.getItem('token');
+          await axios.delete(`${API_BASE_URL}/discussion/${messageId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          toast.success('Message deleted successfully');
+          fetchDiscussions();
+        } catch (err) {
+          console.error('Error deleting message:', err);
+          toast.error(err.response?.data?.error || 'Failed to delete message');
+        } finally {
+          setConfirmModal({ isOpen: false, title: '', message: '', action: null });
+        }
+      }
+    });
   };
 
   const formatDate = (dateString) => {
@@ -235,6 +252,15 @@ const Discussion = () => {
           )}
         </div>
       </div>
+
+      {/* Confirm Modal */}
+      <ConfirmModal
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', action: null })}
+        onConfirm={confirmModal.action}
+        title={confirmModal.title}
+        message={confirmModal.message}
+      />
     </>
   );
 };

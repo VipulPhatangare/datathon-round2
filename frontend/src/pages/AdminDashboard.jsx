@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { adminAPI } from '../api';
+import { useToast } from '../components/ToastProvider';
 import ConfirmModal from '../components/ConfirmModal';
 
 function AdminDashboard() {
+  const toast = useToast();
   const [activeTab, setActiveTab] = useState('teams');
   const [users, setUsers] = useState([]);
   const [answerCSV, setAnswerCSV] = useState(null);
@@ -325,35 +327,46 @@ function AdminDashboard() {
   };
 
   const handleSendCredentialsToTeam = async (userId, teamName) => {
-    if (!confirm(`Send credentials to ${teamName}?`)) return;
-
-    try {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Send Credentials',
+      message: `Send login credentials to ${teamName}?`,
+      action: async () => {
+        try {
       setLoading(true);
       setError('');
       setSuccess('');
       
-      const response = await adminAPI.sendCredentialsToTeam(userId);
-      setSuccess(`Credentials sent successfully to ${teamName}!`);
-      
-      setTimeout(() => setSuccess(''), 5000);
-    } catch (err) {
-      setError(err.response?.data?.error || `Failed to send credentials to ${teamName}`);
-      setTimeout(() => setError(''), 5000);
-    } finally {
-      setLoading(false);
-    }
+        const response = await adminAPI.sendCredentialsToTeam(userId);
+        toast.success(`Credentials sent successfully to ${teamName}!`);
+      } catch (err) {
+        toast.error(err.response?.data?.error || `Failed to send credentials to ${teamName}`);
+      } finally {
+        setLoading(false);
+        setConfirmModal({ isOpen: false, title: '', message: '', action: null });
+      }
+      }
+    });
   };
 
   const handleDeleteUser = async (userId) => {
-    if (!confirm('Are you sure you want to delete this team?')) return;
-
-    try {
-      await adminAPI.deleteUser(userId);
-      setSuccess('Team deleted successfully');
-      fetchUsers();
-    } catch (err) {
-      setError(err.response?.data?.error || 'Failed to delete team');
-    }
+    const user = users.find(u => u._id === userId);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Team',
+      message: `Are you sure you want to delete ${user?.teamName || 'this team'}? This action cannot be undone.`,
+      action: async () => {
+        try {
+          await adminAPI.deleteUser(userId);
+          toast.success('Team deleted successfully');
+          fetchUsers();
+        } catch (err) {
+          toast.error(err.response?.data?.error || 'Failed to delete team');
+        } finally {
+          setConfirmModal({ isOpen: false, title: '', message: '', action: null });
+        }
+      }
+    });
   };
 
   const [uploadingAnswerCSV, setUploadingAnswerCSV] = useState(false);

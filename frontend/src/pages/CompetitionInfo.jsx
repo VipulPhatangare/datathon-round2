@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API_BASE_URL } from '../api';
+import { useToast } from '../components/ToastProvider';
 import Navbar from '../components/Navbar';
 import '../styles/CompetitionInfo.css';
 
 const CompetitionInfo = () => {
+  const toast = useToast();
   const [competition, setCompetition] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -78,7 +80,7 @@ const CompetitionInfo = () => {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error(`Error downloading ${type} dataset:`, err);
-      alert(`Failed to download ${type} dataset. Please try again.`);
+      toast.error(`Failed to download ${type} dataset. Please try again.`);
     } finally {
       setDownloading({ ...downloading, [type]: false });
     }

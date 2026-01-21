@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { submissionAPI, API_BASE_URL } from '../api';
+import { useToast } from '../components/ToastProvider';
 
 function SubmissionDetails() {
+  const toast = useToast();
   const { submissionId } = useParams();
   const navigate = useNavigate();
   const [submission, setSubmission] = useState(null);
@@ -69,7 +71,7 @@ const saveComments = async () => {
       setTimeout(() => setCommentsSaved(false), 3000);
     } catch (err) {
       console.error('Save comments error:', err);
-      alert('Failed to save comments');
+      toast.error('Failed to save comments');
     } finally {
       setSavingComments(false);
     }

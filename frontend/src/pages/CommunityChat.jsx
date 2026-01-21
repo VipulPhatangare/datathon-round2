@@ -3,8 +3,10 @@ import { io } from 'socket.io-client';
 import { useAuth } from '../AuthContext';
 import axios from 'axios';
 import { API_BASE_URL, SOCKET_URL } from '../api';
+import { useToast } from '../components/ToastProvider';
 
 function CommunityChat() {
+  const toast = useToast();
   const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -109,7 +111,7 @@ function CommunityChat() {
 
     newSocket.on('error', (error) => {
       console.error('Socket error:', error);
-      alert(error.message);
+      toast.error(error.message);
     });
 
     setSocket(newSocket);
@@ -175,7 +177,7 @@ function CommunityChat() {
 
   const handleDeleteMessage = async (messageId) => {
     if (!socket || !connected) {
-      alert('Not connected to chat server');
+      toast.warning('Not connected to chat server');
       return;
     }
 
