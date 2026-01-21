@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../api';
 import Navbar from '../components/Navbar';
 import '../styles/CompetitionInfo.css';
 
@@ -16,7 +17,7 @@ const CompetitionInfo = () => {
   const fetchCompetitionInfo = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/api/competition', {
+      const response = await axios.get(`${API_BASE_URL}/competition`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCompetition(response.data.competition);
@@ -33,7 +34,7 @@ const CompetitionInfo = () => {
       setDownloading({ ...downloading, [type]: true });
       const token = localStorage.getItem('token');
       
-      const response = await axios.get(`http://localhost:4000/api/admin/datasets/download/${type}`, {
+      const response = await axios.get(`${API_BASE_URL}/admin/datasets/download/${type}`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob'
       });

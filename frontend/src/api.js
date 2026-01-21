@@ -1,6 +1,11 @@
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const BASE_URL = API_URL.replace('/api', ''); // Remove /api suffix for socket connections
+
+// Export URLs for use in other components
+export const API_BASE_URL = API_URL;
+export const SOCKET_URL = BASE_URL;
 
 // Create axios instance with default config
 const api = axios.create({

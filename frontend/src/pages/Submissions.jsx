@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { submissionAPI } from '../api';
+import { submissionAPI, API_BASE_URL } from '../api';
 import axios from 'axios';
 
 function Submissions() {
@@ -51,7 +51,7 @@ function Submissions() {
   const fetchCompetitionStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/api/submissions/status', {
+      const response = await axios.get(`${API_BASE_URL}/submissions/status`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCompetitionStatus(response.data);
@@ -83,7 +83,7 @@ function Submissions() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `http://localhost:4000/api/submissions/${submissionId}/select-final`,
+        `${API_BASE_URL}/submissions/${submissionId}/select-final`,
         { isSelected: !currentSelection },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -118,7 +118,7 @@ function Submissions() {
       setDownloading(true);
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        'http://localhost:4000/api/submissions/download/csv',
+        `${API_BASE_URL}/submissions/download/csv`,
         {
           headers: { Authorization: `Bearer ${token}` },
           responseType: 'blob'

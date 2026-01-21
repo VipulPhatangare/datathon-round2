@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../api';
 import Navbar from '../components/Navbar';
 import '../styles/Discussion.css';
 
@@ -20,7 +21,7 @@ const Discussion = () => {
   const fetchDiscussions = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:4000/api/discussion?page=${page}&limit=20`, {
+      const response = await axios.get(`${API_BASE_URL}/discussion?page=${page}&limit=20`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setDiscussions(response.data.discussions);
@@ -45,7 +46,7 @@ const Discussion = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:4000/api/discussion',
+        `${API_BASE_URL}/discussion`,
         { message: newMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -69,7 +70,7 @@ const Discussion = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.post(
-        'http://localhost:4000/api/discussion',
+        `${API_BASE_URL}/discussion`,
         { message: replyMessage, parentId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -88,7 +89,7 @@ const Discussion = () => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:4000/api/discussion/${messageId}`, {
+      await axios.delete(`${API_BASE_URL}/discussion/${messageId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchDiscussions();

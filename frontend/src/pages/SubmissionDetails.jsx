@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { submissionAPI } from '../api';
+import { submissionAPI, API_BASE_URL } from '../api';
 
 function SubmissionDetails() {
   const { submissionId } = useParams();
@@ -22,7 +22,7 @@ function SubmissionDetails() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:4000/api/submissions/${submissionId}`,
+        `${API_BASE_URL}/submissions/${submissionId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSubmission(response.data.submission);

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from '../AuthContext';
 import axios from 'axios';
+import { API_BASE_URL, SOCKET_URL } from '../api';
 
 function CommunityChat() {
   const { user } = useAuth();
@@ -28,7 +29,7 @@ function CommunityChat() {
     const fetchMessages = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4000/api/chat', {
+        const response = await axios.get(`${API_BASE_URL}/chat`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMessages(response.data.messages);
@@ -51,7 +52,7 @@ function CommunityChat() {
       return;
     }
 
-    const newSocket = io('http://localhost:4000', {
+    const newSocket = io(SOCKET_URL, {
       auth: {
         token: token
       },

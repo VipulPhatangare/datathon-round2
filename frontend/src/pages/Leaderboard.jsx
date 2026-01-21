@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { leaderboardAPI } from '../api';
+import { leaderboardAPI, API_BASE_URL } from '../api';
 import { useAuth } from '../AuthContext';
 import axios from 'axios';
 
@@ -56,7 +56,7 @@ function Leaderboard() {
   const fetchCompetitionStatus = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/api/submissions/status', {
+      const response = await axios.get(`${API_BASE_URL}/submissions/status`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCompetitionStatus(response.data);
@@ -69,7 +69,7 @@ function Leaderboard() {
 
   async function fetchConfig() {
     try {
-      const response = await axios.get('http://localhost:4000/api/leaderboard/config');
+      const response = await axios.get(`${API_BASE_URL}/leaderboard/config`);
       setEnableUserPrivateLeaderboard(response.data.enableUserPrivateLeaderboard || false);
     } catch (err) {
       console.error('Failed to load config');
@@ -80,7 +80,7 @@ function Leaderboard() {
     try {
       setLoadingConfig(true);
       const newValue = !enableUserPrivateLeaderboard;
-      await axios.put('http://localhost:4000/api/admin/config', {
+      await axios.put(`${API_BASE_URL}/admin/config`, {
         key: 'enableUserPrivateLeaderboard',
         value: newValue
       }, {
@@ -100,7 +100,7 @@ function Leaderboard() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `http://localhost:4000/api/leaderboard?limit=50&includeRank=true&leaderboardType=${leaderboardType}`,
+        `${API_BASE_URL}/leaderboard?limit=50&includeRank=true&leaderboardType=${leaderboardType}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setLeaderboard(response.data.leaderboard);

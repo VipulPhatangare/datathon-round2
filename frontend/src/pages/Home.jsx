@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../api';
 import '../styles/LandingPage.css';
 
 function Home() {
@@ -16,7 +17,7 @@ function Home() {
 
   const fetchCompetitionInfo = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/competition');
+      const response = await axios.get(`${API_BASE_URL}/competition`);
       setCompetition(response.data);
       setLoading(false);
     } catch (error) {
@@ -28,7 +29,7 @@ function Home() {
   const fetchConfig = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4000/api/submissions/status', {
+      const response = await axios.get(`${API_BASE_URL}/submissions/status`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setConfig(response.data);

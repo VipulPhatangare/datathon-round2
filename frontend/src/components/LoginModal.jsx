@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../AuthContext';
+import { API_BASE_URL } from '../api';
 import '../styles/LoginModal.css';
 
 function LoginModal({ onClose }) {
@@ -48,7 +49,7 @@ function LoginModal({ onClose }) {
         throw new Error('Please enter your email');
       }
 
-      const response = await fetch('http://localhost:4000/api/auth/forgot-password', {
+      const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: formData.email })

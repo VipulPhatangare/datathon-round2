@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Papa from 'papaparse';
-import { submissionAPI } from '../api';
+import { submissionAPI, API_BASE_URL } from '../api';
 import axios from 'axios';
 
 function Upload() {
@@ -68,8 +68,7 @@ function Upload() {
 
   const fetchColumnConfig = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
-      const response = await axios.get(`${API_URL}/submissions/column-config`);
+      const response = await axios.get(`${API_BASE_URL}/submissions/column-config`);
       if (response.data.idColumn && response.data.labelColumn) {
         setColumnConfig({
           idColumn: response.data.idColumn,
