@@ -152,6 +152,9 @@ export const adminAPI = {
   // Send credentials to all teams
   sendCredentials: (adminPassword) => api.post('/admin/send-credentials', { adminPassword }),
   
+  // Send credentials to a specific team
+  sendCredentialsToTeam: (userId) => api.post(`/admin/send-credentials/team/${userId}`),
+  
   // Delete all data
   deleteAllData: () => api.delete('/admin/delete-all-data')
 };

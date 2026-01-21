@@ -324,6 +324,26 @@ function AdminDashboard() {
     setAddMember(false);
   };
 
+  const handleSendCredentialsToTeam = async (userId, teamName) => {
+    if (!confirm(`Send credentials to ${teamName}?`)) return;
+
+    try {
+      setLoading(true);
+      setError('');
+      setSuccess('');
+      
+      const response = await adminAPI.sendCredentialsToTeam(userId);
+      setSuccess(`Credentials sent successfully to ${teamName}!`);
+      
+      setTimeout(() => setSuccess(''), 5000);
+    } catch (err) {
+      setError(err.response?.data?.error || `Failed to send credentials to ${teamName}`);
+      setTimeout(() => setError(''), 5000);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDeleteUser = async (userId) => {
     if (!confirm('Are you sure you want to delete this team?')) return;
 
@@ -836,6 +856,14 @@ function AdminDashboard() {
                       </td>
                       <td>
                         <div className="flex gap-1">
+                          <button
+                            onClick={() => handleSendCredentialsToTeam(user._id, user.teamName)}
+                            className="btn btn-primary"
+                            style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}
+                            disabled={loading}
+                          >
+                            📧 Send Credentials
+                          </button>
                           <button
                             onClick={() => startEditUser(user)}
                             className="btn btn-secondary"
