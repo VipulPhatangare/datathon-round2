@@ -57,6 +57,9 @@ function AdminDashboard() {
     isOpen: false,
     title: '',
     message: '',
+    confirmText: 'Confirm',
+    confirmColor: 'primary',
+    loadingText: 'Processing...',
     action: null
   });
 
@@ -331,6 +334,9 @@ function AdminDashboard() {
       isOpen: true,
       title: 'Send Credentials',
       message: `Send login credentials to ${teamName}?`,
+      confirmText: 'Send',
+      confirmColor: 'primary',
+      loadingText: 'Sending...',
       action: async () => {
         try {
       setLoading(true);
@@ -355,6 +361,9 @@ function AdminDashboard() {
       isOpen: true,
       title: 'Delete Team',
       message: `Are you sure you want to delete ${user?.teamName || 'this team'}? This action cannot be undone.`,
+      confirmText: 'Delete',
+      confirmColor: 'danger',
+      loadingText: 'Deleting...',
       action: async () => {
         try {
           await adminAPI.deleteUser(userId);
@@ -363,7 +372,7 @@ function AdminDashboard() {
         } catch (err) {
           toast.error(err.response?.data?.error || 'Failed to delete team');
         } finally {
-          setConfirmModal({ isOpen: false, title: '', message: '', action: null });
+          setConfirmModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: 'primary', loadingText: 'Processing...', action: null });
         }
       }
     });
@@ -2026,8 +2035,11 @@ function AdminDashboard() {
         isOpen={confirmModal.isOpen}
         title={confirmModal.title}
         message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        confirmColor={confirmModal.confirmColor}
+        loadingText={confirmModal.loadingText}
         onConfirm={executeDelete}
-        onCancel={() => setConfirmModal({ isOpen: false, title: '', message: '', action: null })}
+        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: 'primary', loadingText: 'Processing...', action: null })}
         isLoading={loading}
       />
     </div>

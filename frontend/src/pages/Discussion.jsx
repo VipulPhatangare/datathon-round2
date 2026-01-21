@@ -20,6 +20,9 @@ const Discussion = () => {
     isOpen: false,
     title: '',
     message: '',
+    confirmText: 'Confirm',
+    confirmColor: 'primary',
+    loadingText: 'Processing...',
     action: null
   });
 
@@ -98,6 +101,9 @@ const Discussion = () => {
       isOpen: true,
       title: 'Delete Message',
       message: 'Are you sure you want to delete this message? This action cannot be undone.',
+      confirmText: 'Delete',
+      confirmColor: 'danger',
+      loadingText: 'Deleting...',
       action: async () => {
         try {
           const token = localStorage.getItem('token');
@@ -110,7 +116,7 @@ const Discussion = () => {
           console.error('Error deleting message:', err);
           toast.error(err.response?.data?.error || 'Failed to delete message');
         } finally {
-          setConfirmModal({ isOpen: false, title: '', message: '', action: null });
+          setConfirmModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: 'primary', loadingText: 'Processing...', action: null });
         }
       }
     });
@@ -256,10 +262,13 @@ const Discussion = () => {
       {/* Confirm Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
-        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', action: null })}
+        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: 'primary', loadingText: 'Processing...', action: null })}
         onConfirm={confirmModal.action}
         title={confirmModal.title}
         message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        confirmColor={confirmModal.confirmColor}
+        loadingText={confirmModal.loadingText}
       />
     </>
   );

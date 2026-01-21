@@ -20,6 +20,9 @@ function Submissions() {
     isOpen: false,
     title: '',
     message: '',
+    confirmText: 'Confirm',
+    confirmColor: 'primary',
+    loadingText: 'Processing...',
     action: null
   });
   
@@ -111,6 +114,9 @@ function Submissions() {
       isOpen: true,
       title: 'Delete Submission',
       message: `Are you sure you want to delete "${filename}"?\n\nNote: This submission will still count towards your submission limit.`,
+      confirmText: 'Delete',
+      confirmColor: 'danger',
+      loadingText: 'Deleting...',
       action: async () => {
         try {
           const response = await submissionAPI.deleteSubmission(submissionId);
@@ -361,10 +367,13 @@ function Submissions() {
       {/* Confirm Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
-        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', action: null })}
+        onClose={() => setConfirmModal({ isOpen: false, title: '', message: '', confirmText: 'Confirm', confirmColor: 'primary', loadingText: 'Processing...', action: null })}
         onConfirm={confirmModal.action}
         title={confirmModal.title}
         message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        confirmColor={confirmModal.confirmColor}
+        loadingText={confirmModal.loadingText}
       />
     </div>
   );
