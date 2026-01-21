@@ -1084,6 +1084,43 @@ router.post('/send-credentials', requireAuth, requireAdmin, async (req, res) => 
   }
 });
 
+// Send credentials to a single team
+router.post('/send-credentials/team/:userId', requireAuth, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const user = await User.findById(userId).select('email teamName leaderName leaderEmail');
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User/Team not found' });
+    }
+
+    // Use leader email as password
+    const tempPassword = user.leaderEmail || user.email;
+    
+    // Hash and update password
+    const hashedPassword = await bcrypt.hash(tempPassword, 10);
+    user.passwordHash = hashedPassword;
+    await user.save();
+    
+    // Send email with credentials
+    const { sendCredentialEmail } = await import('../utils/email.js');
+    const result = await sendCredentialEmail(user.email, user.teamName, user.leaderName, tempPassword);
+    
+    console.log(`Credentials sent to ${user.teamName}: ${user.email} / ${tempPassword}`);
+    
+    res.json({ 
+      message: `Credentials sent successfully to ${user.teamName}`,
+      teamName: user.teamName,
+      email: user.email,
+      messageId: result.messageId
+    });
+  } catch (error) {
+    console.error('Send credentials to team error:', error);
+    res.status(500).json({ error: 'Failed to send credentials' });
+  }
+});
+
 // Send email to all team leaders
 router.post('/send-email/all', requireAuth, requireAdmin, upload.array('attachments', 5), async (req, res) => {
   try {

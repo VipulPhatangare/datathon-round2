@@ -208,6 +208,12 @@ export async function sendCredentialEmail(toEmail, teamName, leaderName, passwor
                                       <p style="margin:0;color:#991b1b;font-size:14px;font-weight:600;">⚠️ Security Notice</p>
                                       <p style="margin:8px 0 0 0;color:#7f1d1d;font-size:14px;line-height:1.5;">Please change your password immediately after your first login for security purposes.</p>
                                   </div>
+                                  <div style="background:#e7f3ff;border-left:4px solid #3b82f6;padding:15px 20px;border-radius:6px;margin:25px 0;">
+                                      <p style="margin:0;color:#1e40af;font-size:14px;font-weight:600;">🌐 Access the Platform</p>
+                                      <p style="margin:8px 0 0 0;color:#1e40af;font-size:14px;line-height:1.5;">
+                                          Visit: <a href="https://datathon.gfgpccoe.in/" style="color:#3b82f6;text-decoration:none;font-weight:600;">https://datathon.gfgpccoe.in/</a>
+                                      </p>
+                                  </div>
                                   <p style="margin:30px 0 0 0;font-size:15px;color:#6b7280;line-height:1.6;">Best wishes for the competition!</p>
                                   <p style="margin:10px 0 0 0;font-size:15px;color:#1e3a8a;font-weight:600;">Team Datathon</p>
                               </td>
