@@ -74,15 +74,20 @@ router.get('/status', requireAuth, async (req, res) => {
     const startTime = (startConfig && startConfig.value) ? new Date(startConfig.value) : null;
     const endTime = (endConfig && endConfig.value) ? new Date(endConfig.value) : null;
 
-    let status = 'active';
-    let message = 'Competition is active';
+    let status = 'not_started';
+    let message = 'Competition has not started yet';
 
-    if (startTime && !isNaN(startTime.getTime()) && now < startTime) {
+    // If no start time configured, competition is not started
+    if (!startTime || !isNaN(startTime.getTime()) && now < startTime) {
       status = 'not_started';
       message = 'Competition has not started yet';
     } else if (endTime && !isNaN(endTime.getTime()) && now > endTime) {
       status = 'ended';
       message = 'Competition has ended';
+    } else if (startTime && !isNaN(startTime.getTime()) && now >= startTime) {
+      // Only active if start time exists and has passed
+      status = 'active';
+      message = 'Competition is active';
     }
 
     // Get user submission count
