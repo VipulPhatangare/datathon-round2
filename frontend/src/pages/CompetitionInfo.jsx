@@ -9,10 +9,27 @@ const CompetitionInfo = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [downloading, setDownloading] = useState({ training: false, testing: false, sample: false });
+  const [competitionStatus, setCompetitionStatus] = useState(null);
+  const [statusLoading, setStatusLoading] = useState(true);
 
   useEffect(() => {
     fetchCompetitionInfo();
+    fetchCompetitionStatus();
   }, []);
+
+  const fetchCompetitionStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${API_BASE_URL}/submissions/status`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCompetitionStatus(response.data);
+    } catch (err) {
+      console.error('Failed to load competition status');
+    } finally {
+      setStatusLoading(false);
+    }
+  };
 
   const fetchCompetitionInfo = async () => {
     try {
@@ -107,10 +124,56 @@ const CompetitionInfo = () => {
         <div className="competition-container">
           <h1 className="competition-title">{competition.title}</h1>
           
-          {/* Download Datasets Section */}
-          <div className="info-section" style={{ backgroundColor: '#e8f4f8', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
-            <h2 style={{ marginBottom: '1rem', color: '#2c3e50' }}>Download Datasets</h2>
-            <p style={{ marginBottom: '1rem', color: '#34495e' }}>Download the competition datasets to get started with your analysis and predictions.</p>
+          {/* Competition Status Messages */}
+          {!statusLoading && competitionStatus && (
+            <>
+              {competitionStatus.status === 'not_started' && (
+                <div style={{ 
+                  padding: '1.5rem', 
+                  backgroundColor: '#fff3cd',
+                  borderLeft: '4px solid #f39c12',
+                  borderRadius: '8px',
+                  marginBottom: '2rem'
+                }}>
+                  <h3 style={{ marginTop: 0, color: '#f39c12', fontSize: '1.2rem' }}>🚫 Competition Not Started</h3>
+                  {competitionStatus.competitionStartTime ? (
+                    <p style={{ margin: '0.5rem 0', color: '#856404' }}>
+                      The competition will begin on{' '}
+                      <strong>{new Date(competitionStatus.competitionStartTime).toLocaleString()}</strong>.
+                      <br />
+                      Datasets will be available once the competition starts.
+                    </p>
+                  ) : (
+                    <p style={{ margin: '0.5rem 0', color: '#856404' }}>
+                      Competition schedule not set yet. Datasets will be available once the competition starts.
+                    </p>
+                  )}
+                </div>
+              )}
+              
+              {competitionStatus.status === 'ended' && (
+                <div style={{ 
+                  padding: '1.5rem', 
+                  backgroundColor: '#f8d7da',
+                  borderLeft: '4px solid #e74c3c',
+                  borderRadius: '8px',
+                  marginBottom: '2rem'
+                }}>
+                  <h3 style={{ marginTop: 0, color: '#e74c3c', fontSize: '1.2rem' }}>🏁 Competition Ended</h3>
+                  <p style={{ margin: '0.5rem 0', color: '#721c24' }}>
+                    The competition ended on{' '}
+                    <strong>{new Date(competitionStatus.competitionEndTime).toLocaleString()}</strong>.
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+          
+          {/* Download Datasets Section - Only show when competition is active */}
+          {!statusLoading && competitionStatus?.status === 'active' && (
+            <div className="info-section" style={{ backgroundColor: '#e8f4f8', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
+              <h2 style={{ marginBottom: '1rem', color: '#2c3e50' }}>Download Datasets</h2>
+              <p style={{ marginBottom: '1rem', color: '#34495e' }}>Download the competition datasets to get started with your analysis and predictions.</p>
             <div className="download-buttons-grid">
               <button 
                 onClick={() => handleDownloadDataset('training')}
@@ -197,6 +260,7 @@ const CompetitionInfo = () => {
               </button>
             </div>
           </div>
+          )}
 
           <div className="info-section">
             <h2>Description</h2>
