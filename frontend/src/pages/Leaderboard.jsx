@@ -398,7 +398,7 @@ function Leaderboard() {
                           <td>{formatMetricValue(entry.mape, 'mape')}</td>
                         </>
                       )}
-                      <td>{new Date(entry.submissionDate).toLocaleDateString()}</td>
+                      <td>{new Date(entry.submissionDate).toLocaleDateString('en-GB')}</td>
                     </tr>
                   );
                 })}

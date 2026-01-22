@@ -167,7 +167,7 @@ function CommunityChat() {
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
     
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString('en-GB', { 
       month: 'short', 
       day: 'numeric',
       hour: '2-digit',

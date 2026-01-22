@@ -88,7 +88,7 @@ const CompetitionInfo = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return 'Not specified';
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString('en-GB', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
