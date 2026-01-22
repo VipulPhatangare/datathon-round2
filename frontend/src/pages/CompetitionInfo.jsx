@@ -305,40 +305,6 @@ const CompetitionInfo = () => {
             </div>
           )}
 
-          {competition.dataDescription && (
-            <div className="info-section">
-              <h2>Data Description</h2>
-              <div className="data-description">
-                <p><strong>Overview:</strong> {competition.dataDescription.overview}</p>
-                
-                {competition.dataDescription.files && competition.dataDescription.files.length > 0 && (
-                  <div className="files-section">
-                    <h3>Files</h3>
-                    <ul>
-                      {competition.dataDescription.files.map((file, index) => (
-                        <li key={index}>
-                          <strong>{file.name}:</strong> {file.description}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {competition.dataDescription.columns && competition.dataDescription.columns.length > 0 && (
-                  <div className="columns-section">
-                    <h3>Columns</h3>
-                    <ul>
-                      {competition.dataDescription.columns.map((col, index) => (
-                        <li key={index}>
-                          <strong>{col.name}</strong> ({col.type}): {col.description}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </>
