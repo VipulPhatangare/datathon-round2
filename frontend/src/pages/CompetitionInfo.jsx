@@ -305,19 +305,6 @@ const CompetitionInfo = () => {
             </div>
           )}
 
-          {competition.prizes && competition.prizes.length > 0 && (
-            <div className="info-section prizes">
-              <h2>Prizes</h2>
-              <ul className="prizes-list">
-                {competition.prizes.map((prize, index) => (
-                  <li key={index}>
-                    <strong>{prize.position}:</strong> {prize.reward}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
           {competition.dataDescription && (
             <div className="info-section">
               <h2>Data Description</h2>

@@ -19,7 +19,6 @@ function AdminDashboard() {
     description: '',
     evaluationCriteria: '',
     rules: [''],
-    prizes: [{ position: '', reward: '' }],
     timeline: {
       startDate: '',
       endDate: '',
@@ -164,7 +163,6 @@ function AdminDashboard() {
         description: data.description || '',
         evaluationCriteria: data.evaluationCriteria || '',
         rules: data.rules && data.rules.length > 0 ? data.rules : [''],
-        prizes: data.prizes && data.prizes.length > 0 ? data.prizes : [{ position: '', reward: '' }],
         timeline: {
           startDate: data.timeline?.startDate || '',
           endDate: data.timeline?.endDate || '',
@@ -376,6 +374,26 @@ function AdminDashboard() {
         }
       }
     });
+  };
+
+  const handleToggleLeaderboard = async (userId, currentHideStatus) => {
+    const user = users.find(u => u._id === userId);
+    const action = currentHideStatus ? 'show' : 'hide';
+    
+    try {
+      setLoading(true);
+      await axios.put(`${API_BASE_URL}/admin/users/${userId}/toggle-leaderboard`, {
+        hideFromLeaderboard: !currentHideStatus
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      toast.success(`${user?.teamName || 'Team'} ${action === 'hide' ? 'hidden from' : 'shown on'} leaderboard`);
+      fetchUsers();
+    } catch (err) {
+      toast.error(err.response?.data?.error || `Failed to ${action} team on leaderboard`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const [uploadingAnswerCSV, setUploadingAnswerCSV] = useState(false);
@@ -601,21 +619,6 @@ function AdminDashboard() {
     const newRules = [...competition.rules];
     newRules[index] = value;
     setCompetition({ ...competition, rules: newRules });
-  };
-
-  const addPrize = () => {
-    setCompetition({ ...competition, prizes: [...competition.prizes, { position: '', reward: '' }] });
-  };
-
-  const removePrize = (index) => {
-    const newPrizes = competition.prizes.filter((_, i) => i !== index);
-    setCompetition({ ...competition, prizes: newPrizes });
-  };
-
-  const updatePrize = (index, field, value) => {
-    const newPrizes = [...competition.prizes];
-    newPrizes[index][field] = value;
-    setCompetition({ ...competition, prizes: newPrizes });
   };
 
   const addFile = () => {
@@ -858,12 +861,13 @@ function AdminDashboard() {
                     <th>Member Email</th>
                     <th>Submissions</th>
                     <th>Best Accuracy</th>
+                    <th>Leaderboard</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {users.map((user) => (
-                    <tr key={user._id}>
+                    <tr key={user._id} style={{ backgroundColor: user.hideFromLeaderboard ? '#ffe6e6' : 'transparent' }}>
                       <td>{user.teamName}</td>
                       <td>{user.leaderName}</td>
                       <td>{user.leaderEmail}</td>
@@ -875,6 +879,16 @@ function AdminDashboard() {
                           ? `${(user.bestAccuracy * 100).toFixed(2)}%`
                           : 'N/A'
                         }
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => handleToggleLeaderboard(user._id, user.hideFromLeaderboard)}
+                          className={user.hideFromLeaderboard ? 'btn btn-secondary' : 'btn btn-success'}
+                          style={{ padding: '0.4rem 0.8rem', fontSize: '0.9rem' }}
+                          disabled={loading}
+                        >
+                          {user.hideFromLeaderboard ? '👁️ Show' : '🙈 Hide'}
+                        </button>
                       </td>
                       <td>
                         <div className="flex gap-1">
@@ -1693,37 +1707,6 @@ function AdminDashboard() {
               ))}
               <button type="button" className="btn btn-secondary" onClick={addRule}>
                 + Add Rule
-              </button>
-
-              {/* Prizes */}
-              <h3 style={{ marginTop: '2rem', marginBottom: '1rem', color: '#333' }}>Prizes</h3>
-              {(competition.prizes || []).map((prize, index) => (
-                <div key={index} className="form-group">
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={prize.position}
-                      onChange={(e) => updatePrize(index, 'position', e.target.value)}
-                      placeholder="Position (e.g., 1st Place)"
-                      style={{ flex: 1 }}
-                    />
-                    <input
-                      type="text"
-                      className="form-input"
-                      value={prize.reward}
-                      onChange={(e) => updatePrize(index, 'reward', e.target.value)}
-                      placeholder="Reward (e.g., $1000)"
-                      style={{ flex: 1 }}
-                    />
-                    <button type="button" className="btn btn-danger" onClick={() => removePrize(index)}>
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              ))}
-              <button type="button" className="btn btn-secondary" onClick={addPrize}>
-                + Add Prize
               </button>
 
               {/* Data Description */}

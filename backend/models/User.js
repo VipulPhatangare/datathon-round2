@@ -68,6 +68,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  hideFromLeaderboard: {
+    type: Boolean,
+    default: false
+  },
   banReason: {
     type: String,
     default: null

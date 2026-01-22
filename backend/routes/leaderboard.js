@@ -98,16 +98,21 @@ router.get('/', async (req, res) => {
       }
     ]);
 
-    // Populate user info
+    // Populate user info and filter out hidden users
     const userIds = leaderboardData.map(entry => entry._id);
-    const users = await User.find({ _id: { $in: userIds } })
+    const users = await User.find({ 
+      _id: { $in: userIds },
+      hideFromLeaderboard: { $ne: true }
+    })
       .select('email teamName leaderName')
       .lean();
 
     const userMap = new Map(users.map(user => [user._id.toString(), user]));
 
-    // Combine data and include all metrics
-    const leaderboard = leaderboardData.map((entry, index) => {
+    // Combine data and include all metrics, filter out hidden users
+    const leaderboard = leaderboardData
+      .filter(entry => userMap.has(entry._id.toString()))
+      .map((entry, index) => {
       const user = userMap.get(entry._id.toString());
       const baseData = {
         rank: index + 1,
