@@ -114,7 +114,7 @@ const saveComments = async () => {
           <div>
             <h1 className="card-title">Submission Details</h1>
             <p style={{ color: '#7f8c8d', marginTop: '0.5rem' }}>
-              Attempt #{submission.attemptNumber} • {new Date(submission.uploadedAt).toLocaleString()}
+              Attempt #{submission.attemptNumber} • {new Date(submission.uploadedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -145,7 +145,7 @@ const saveComments = async () => {
               <strong>Filename:</strong> {submission.filename}
             </div>
             <div>
-              <strong>Uploaded:</strong> {new Date(submission.uploadedAt).toLocaleString()}
+              <strong>Uploaded:</strong> {new Date(submission.uploadedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
             </div>
             <div>
               <strong>Status:</strong> <span style={{ color: 'green' }}>{submission.status || 'Done'}</span>

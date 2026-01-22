@@ -219,7 +219,7 @@ function Leaderboard() {
               {competitionStatus.competitionStartTime ? (
                 <>
                   The competition will begin on{' '}
-                  <strong>{new Date(competitionStatus.competitionStartTime).toLocaleString()}</strong>.
+                  <strong>{new Date(competitionStatus.competitionStartTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong>.
                 </>
               ) : (
                 <>Competition schedule has not been set yet.</>

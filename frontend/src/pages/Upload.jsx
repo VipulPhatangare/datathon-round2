@@ -210,7 +210,7 @@ function Upload() {
                   {competitionStatus.competitionStartTime ? (
                     <>
                       The competition will begin on{' '}
-                      <strong>{new Date(competitionStatus.competitionStartTime).toLocaleString()}</strong>.
+                      <strong>{new Date(competitionStatus.competitionStartTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong>.
                     </>
                   ) : (
                     <>Competition schedule not set yet.</>
@@ -282,7 +282,7 @@ function Upload() {
                 <div className="alert alert-error">
                   <strong>Competition Ended</strong>
                   <br />
-                  The competition ended on {new Date(competitionStatus.competitionEndTime).toLocaleString()}.
+                  The competition ended on {new Date(competitionStatus.competitionEndTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}.
                   <br />
                   No more submissions are accepted.
                 </div>

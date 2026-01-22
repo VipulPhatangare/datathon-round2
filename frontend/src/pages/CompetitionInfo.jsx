@@ -141,7 +141,7 @@ const CompetitionInfo = () => {
                   {competitionStatus.competitionStartTime ? (
                     <p style={{ margin: '0.5rem 0', color: '#856404' }}>
                       The competition will begin on{' '}
-                      <strong>{new Date(competitionStatus.competitionStartTime).toLocaleString()}</strong>.
+                      <strong>{new Date(competitionStatus.competitionStartTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong>.
                       <br />
                       Datasets will be available once the competition starts.
                     </p>
@@ -164,7 +164,7 @@ const CompetitionInfo = () => {
                   <h3 style={{ marginTop: 0, color: '#e74c3c', fontSize: '1.2rem' }}>🏁 Competition Ended</h3>
                   <p style={{ margin: '0.5rem 0', color: '#721c24' }}>
                     The competition ended on{' '}
-                    <strong>{new Date(competitionStatus.competitionEndTime).toLocaleString()}</strong>.
+                    <strong>{new Date(competitionStatus.competitionEndTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</strong>.
                   </p>
                 </div>
               )}

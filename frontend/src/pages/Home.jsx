@@ -115,7 +115,7 @@ function Home() {
               <div style={{ padding: '1rem', backgroundColor: '#ffe0e0', borderLeft: '4px solid #e74c3c', borderRadius: '4px' }}>
                 <h3 style={{ color: '#e74c3c', marginTop: 0 }}>⏹️ Competition Ended</h3>
                 <p style={{ color: '#c0392b' }}>
-                  The competition ended on {new Date(config.competitionEndTime).toLocaleString()}
+                  The competition ended on {new Date(config.competitionEndTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
             ) : isCompetitionStarted ? (
@@ -149,7 +149,7 @@ function Home() {
                       </div>
                     </div>
                     <p style={{ marginTop: '1rem', color: '#d35400', marginBottom: 0 }}>
-                      Deadline: {new Date(config.competitionEndTime).toLocaleString()}
+                      Deadline: {new Date(config.competitionEndTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                 )}
@@ -185,7 +185,13 @@ function Home() {
                       </div>
                     </div>
                     <p style={{ marginTop: '1rem', color: '#ad1457', marginBottom: 0 }}>
-                      Start: {new Date(config.competitionStartTime).toLocaleString()}
+                      Start: {new Date(config.competitionStartTime).toLocaleDateString('en-GB', { 
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })}
                     </p>
                   </div>
                 )}
@@ -194,7 +200,7 @@ function Home() {
                   <div style={{ padding: '1rem', backgroundColor: '#fff3cd', borderLeft: '4px solid #f39c12', borderRadius: '4px' }}>
                     <h3 style={{ color: '#f39c12', marginTop: 0 }}>⚡ Starting Very Soon!</h3>
                     <p style={{ color: '#d35400', marginBottom: 0 }}>
-                      Competition starts at: {new Date(config.competitionStartTime).toLocaleString()}
+                      Competition starts at: {new Date(config.competitionStartTime).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                 )}
