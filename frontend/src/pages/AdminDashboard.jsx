@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { adminAPI } from '../api';
+import { adminAPI, API_BASE_URL } from '../api';
 import { useToast } from '../components/ToastProvider';
 import ConfirmModal from '../components/ConfirmModal';
+import axios from 'axios';
 
 function AdminDashboard() {
   const toast = useToast();
