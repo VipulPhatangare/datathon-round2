@@ -91,7 +91,7 @@ router.get('/', async (req, res) => {
         }
       },
       {
-        $sort: sortCriteria
+        $sort: { bestMetricValue: sortCriteria[metricField] }
       },
       {
         $limit: limit
